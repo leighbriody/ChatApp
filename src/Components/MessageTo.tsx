@@ -4,7 +4,7 @@ interface MessageFromProps {
   content:string;
 }
 
-function MessageToBubble() {
+function MessageToBubble({ content }: MessageFromProps) {
   // Props that will need to be passed down
   // Image , Message Contents
 
@@ -18,8 +18,7 @@ function MessageToBubble() {
         />
       </div>
       <div className="flex-1 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
-        <div>Lorem ipsum dolor sit</div>
-        Below is the code needed to have the bubble on the right
+        <div>{content}</div>
         {/* <div class="absolute right-0 top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-100"></div> */}
         <div className="absolute right-0 top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-400"></div>
       </div>

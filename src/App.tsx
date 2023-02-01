@@ -9,7 +9,7 @@ function App() {
      <Header></Header>
      <Emoji></Emoji>
      <MessagesContainer></MessagesContainer>
-     <SendMessage></SendMessage>
+   
     </div>
   );
 }
