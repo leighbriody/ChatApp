@@ -23,34 +23,30 @@ export interface RootObject {
 }
 
 type Prop = {
-  sendData:(message:Message)=>Message;
-}
+  sendData: (message: Message) => Message;
+};
 
-export default function SendMessage({sendData} : Prop) {
+export default function SendMessage({ sendData }: Prop) {
   const [message, setMessage] = useState("");
 
   const handleChange = (event: {
     target: { value: SetStateAction<string> };
   }) => {
     setMessage(event.target.value);
-
-    console.log("value is:", event.target.value);
   };
 
-  const handleClick = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    setMessage("")
-   let userMessageObject = {} as Message;
-   userMessageObject.content = message;
-   userMessageObject.recipient = "leigh"
-  sendData(userMessageObject)
-    
-    //need to create a message from bubble
-    //clear the text field inout
-    //make our request to the api
+  function sendMessageToParent(message: string, recipient: string) {
+    let messageObj = {} as Message;
+    messageObj.content = message;
+    messageObj.recipient = recipient;
+    sendData(messageObj);
+  }
+
+  async function makeRequest(message: string) {
+    //
     const { Configuration, OpenAIApi } = require("openai");
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: "insert your open ao key here",
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createCompletion({
@@ -64,13 +60,24 @@ export default function SendMessage({sendData} : Prop) {
 
     //get our response
     const response = completion.data.choices[0].text?.trim();
-    let messageooBJ = {} as Message;
-    messageooBJ.content = response;
-    messageooBJ.recipient = "user"
-    sendData(messageooBJ)
+    return response;
+  }
+
+  const handleClick = async (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    //reset message
+    setMessage("");
+
+    //create message object and send to parent component
+    sendMessageToParent(message, "leigh");
+
+    //make request to the api
+    let apiResponse = await makeRequest(message);
+
+    //send response to parent component
+    sendMessageToParent(apiResponse, "user");
   };
 
- 
   return (
     <section className="hero container max-w-screen-lg mx-auto pb-10 flex justify-center mg-0 p-0 absolute bottom-0 inset-x-0 ">
       <div className="w-full mt-16 md:mt-0  bg-gray-800">

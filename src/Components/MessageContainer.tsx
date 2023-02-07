@@ -13,6 +13,8 @@ interface Messages {
 }
 
 function MessagesContainer() {
+  const messagesEndRef = useRef(null);
+
   const [allMessages, setMessages] = useState<Messages>({ messages: [] });
 
   const sendData = (data: Message) => {
@@ -20,29 +22,22 @@ function MessagesContainer() {
       messages: [...prevState.messages, data],
     }));
 
-    //change this to not return and be void
-
     return data;
   };
-  //Create an array of messages
-  const messages: Messages = {
-    messages: [],
-  };
+  
 
   return (
     <span>
-      <div className="overflow-y-scroll scrollbar h-60">
-        <div className="flex flex-col justify-end h-60">
-          {allMessages.messages.map((message) =>
-            message.recipient === "user" ? (
-              <MessageFromBubble content={message.content} />
-            ) : (
-              <MessageToBubble content={message.content} />
-            )
-          )}
-        </div>
+      <div className="px-4 py-2 overflow-y-scroll h-64">
+        {allMessages.messages.map((message) =>
+          message.recipient === "user" ? (
+            <MessageFromBubble content={message.content} />
+          ) : (
+            <MessageToBubble content={message.content} />
+          )
+        )}
+      
       </div>
-      <SendMessage sendData={sendData}></SendMessage>
     </span>
   );
 }
